@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="HelixVSx64.c157e906-a1dc-4f21-a5a2-ff052038a44e" Version="2011.1" Language="en-US" Publisher="Perforce Software" />
+        <Identity Id="HelixVSx64.c157e906-a1dc-4f21-a5a2-ff052038a44e" Version="2023.1.1" Language="en-US" Publisher="Perforce Software/Sebastien Pellizzari" />
         <DisplayName>HelixVS</DisplayName>
         <Description xml:space="preserve">P4VS is the Helix Plugin for Microsoft Visual Studio. P4VS provides developers working within Visual Studio access to Helix Core version control features, including check in/check out, view file history, and more.</Description>
         <MoreInfo>http://www.perforce.com/product/components/visual-studio-plug-in</MoreInfo>
