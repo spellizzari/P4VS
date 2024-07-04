@@ -1,10 +1,4 @@
-﻿using Perforce.P4;
-using Microsoft.VisualStudio.Core.Imaging;
-using Microsoft.VisualStudio.Language.CodeLens;
-using Microsoft.VisualStudio.Language.CodeLens.Remoting;
-using Microsoft.VisualStudio.Threading;
-using Microsoft.VisualStudio.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
@@ -12,7 +6,13 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.Core.Imaging;
+using Microsoft.VisualStudio.Language.CodeLens;
+using Microsoft.VisualStudio.Language.CodeLens.Remoting;
+using Microsoft.VisualStudio.Threading;
+using Microsoft.VisualStudio.Utilities;
 using Microsoft.Win32;
+using Perforce.P4;
 
 namespace CodeLensOopProvider
 {
@@ -30,7 +30,7 @@ namespace CodeLensOopProvider
             Debug.Assert(descriptor != null);
             var Repo = HelixUtility.GetRepository(descriptor.FilePath, out string repoRoot,
                 out Changelist latest);
-            return Task.FromResult<bool>(Repo != null && latest !=null);
+            return Task.FromResult<bool>(Repo != null && latest != null);
         }
 
         public Task<IAsyncCodeLensDataPoint> CreateDataPointAsync(CodeLensDescriptor descriptor, CodeLensDescriptorContext context, CancellationToken token)
@@ -74,14 +74,14 @@ namespace CodeLensOopProvider
 
                     return Task.FromResult(response);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     System.Windows.Forms.MessageBox.Show(
                         "file: " + descriptor.FilePath + "\r\n" +
                         "port: " + this.rep.Server.Address + "\r\n" +
                         "user: " + this.rep.Connection.UserName + "\r\n" +
-                        "client: " +  this.rep.Connection.Client.Name + "\r\n" +
-                        "Exception:" + "\r\n" +ex.ToString());
+                        "client: " + this.rep.Connection.Client.Name + "\r\n" +
+                        "Exception:" + "\r\n" + ex.ToString());
                     return Task.FromResult<CodeLensDataPointDescriptor>(null);
                 }
             }
@@ -143,7 +143,7 @@ namespace CodeLensOopProvider
                             },
                             new CodeLensDetailEntryField()
                             {
-                                Text = commit.Description.Length > 50 ? 
+                                Text = commit.Description.Length > 50 ?
                                 commit.Description.Replace(System.Environment.NewLine," ").Substring(0,50)+"..." :
                                 commit.Description.Replace(System.Environment.NewLine," "),//commit.MessageShort,
                             },
@@ -203,9 +203,20 @@ namespace CodeLensOopProvider
             ///  This is not part of the IAsyncCodeLensDataPoint interface.
             ///  The data point source can call this method to notify the client proxy that data for this data point has changed.
             /// </remarks>
-            public void Invalidate()
+#pragma warning disable VSTHRD100 // Avoid async void methods
+            public async void Invalidate()
+#pragma warning restore VSTHRD100 // Avoid async void methods
             {
-                this.InvalidatedAsync?.Invoke(this, EventArgs.Empty).ConfigureAwait(false);
+                if (InvalidatedAsync != null)
+                {
+                    try
+                    {
+                        await InvalidatedAsync.InvokeAsync(this, EventArgs.Empty).ConfigureAwait(false);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
 
             private static ImageId GetCommitTypeIcon(Changelist commit)

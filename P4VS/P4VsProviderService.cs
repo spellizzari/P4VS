@@ -34,28 +34,26 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ******************************************************************************/
 
-using System;
-using System.IO;
-using System.Linq;
-using System.Diagnostics;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows.Documents;
-using System.Windows.Threading;
-using System.Threading;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio;
 using NLog;
-using System.Windows.Forms;
-using ScmFile = Perforce.P4.FileMetaData;
-using FileMap = System.Collections.Generic.Dictionary<string, Perforce.P4.FileMetaData>;
 using Perforce.P4Scm;
-using EnvDTE;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
+using System.Windows.Threading;
+using FileMap = System.Collections.Generic.Dictionary<string, Perforce.P4.FileMetaData>;
+using ScmFile = Perforce.P4.FileMetaData;
 
 namespace Perforce.P4VS
 {
@@ -109,7 +107,7 @@ namespace Perforce.P4VS
         private static int lastAccessedIndex = 0;
 
 #if !VS2012
-		internal static P4SolutionExplorer SolutionExplorer = null;
+        internal static P4SolutionExplorer SolutionExplorer = null;
 #endif
 
         private Dispatcher _uiDispatcher;
@@ -365,8 +363,8 @@ namespace Perforce.P4VS
 #if VS2010 || VS2012
         int[] glyphMap = { 1, 3, 6, 12, 2, 4, 9, 11, -1, -1, 22, 28, 18, 20, 10, 8 };
 #else
-		//                 0  1  2  3   4  5  6  7   8   9  10  11  12 13 14  15
-		int[] glyphMap = { 1, 3, 6, 12, 2, 4, 9, 11, -1, -1, 6, 12, 2, 4, 10, 8 };
+        //                 0  1  2  3   4  5  6  7   8   9  10  11  12 13 14  15
+        int[] glyphMap = { 1, 3, 6, 12, 2, 4, 9, 11, -1, -1, 6, 12, 2, 4, 10, 8 };
 #endif
         /// <summary>
         /// Provide source control icons for the specified files and returns scc status of files
@@ -1274,12 +1272,12 @@ Resources.P4VS, MessageBoxButtons.OK, MessageBoxIcon.Error);
             _P4VsProvider.ClientStream.clearExists();
 
 #if !VS2012
-			if (SolutionExplorer != null)
-			{
-				SolutionExplorer.Dispose();
-			}
-			SolutionExplorer = new P4SolutionExplorer();
-			SolutionExplorer.Capture();
+            if (SolutionExplorer != null)
+            {
+                SolutionExplorer.Dispose();
+            }
+            SolutionExplorer = new P4SolutionExplorer();
+            SolutionExplorer.Capture();
 
 #endif
             return VSConstants.S_OK;
@@ -2452,13 +2450,13 @@ Resources.P4VS, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 changeToSubmit = ScmProvider.SaveChangelist(changeToSubmit, null);
                                 changeListId = changeToSubmit.Id;
                             }
-                            if (changeListId > 0)
-                            {
-                                changeToSubmit = ScmProvider.GetChangelist(changeListId);
-                                changeToSubmit.Description = newChangeDescription;
-                                changeToSubmit = ScmProvider.SaveChangelist(changeToSubmit, null);
-                                changeListId = changeToSubmit.Id;
-                            }
+                            //if (changeListId > 0)
+                            //{
+                            //    changeToSubmit = ScmProvider.GetChangelist(changeListId);
+                            //    changeToSubmit.Description = newChangeDescription;
+                            //    changeToSubmit = ScmProvider.SaveChangelist(changeToSubmit, null);
+                            //    changeListId = changeToSubmit.Id;
+                            //}
 
                             ScmProvider.RenameFile(rgszMkOldNames, rgszMkNewNames, changeListId);
                             ScmProvider.UpdateFiles(rgszMkOldNames, true);
@@ -4454,9 +4452,9 @@ Resources.P4VS, MessageBoxButtons.OK, MessageBoxIcon.Error);
             throw new NotImplementedException();
         }
 
-        public DTE DTE => throw new NotImplementedException();
+        public EnvDTE.DTE DTE => throw new NotImplementedException();
 
-        public DTE Parent => throw new NotImplementedException();
+        public EnvDTE.DTE Parent => throw new NotImplementedException();
 
         public void OnQueryRemoveFilesEx(IVsProject pProject, int cFiles, string[] rgpszMkDocuments, uint[] rgFlags, VSQUERYREMOVEFILERESULTS[] pSummaryResult, VSQUERYREMOVEFILERESULTS[] rgResults)
         {
